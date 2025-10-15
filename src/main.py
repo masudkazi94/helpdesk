@@ -176,7 +176,3 @@ def handle_post_home(request: Request):
         "user": user,
         "tickets": tickets
     })
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
