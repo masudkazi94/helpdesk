@@ -1,0 +1,6 @@
+v_helpdesk/ 
+__pycache__/ 
+*.pyc 
+*.db 
+helpdesk.db 
+.env 

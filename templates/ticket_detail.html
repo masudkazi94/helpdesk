@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ticket #{{ ticket.id }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="nav">
+        <h1>Ticket #{{ ticket.id }}</h1>
+        <a href="/" style="background: #6c757d; color: white; padding: 10px 15px; text-decoration: none; border-radius: 6px;">← Back</a>
+    </div>
+
+    <div class="card">
+        <h2>{{ ticket.title }}</h2>
+        <p><strong>Status:</strong> <span class="status-{{ ticket.status|lower }}">{{ ticket.status }}</span></p>
+        <p><strong>Created:</strong> {{ ticket.created_at }}</p>
+        
+        <h3>Description:</h3>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin: 15px 0;">
+            {{ ticket.description }}
+        </div>
+        
+        <div>
+            {% if ticket.status == 'Open' %}
+            <form action="/close_ticket/{{ ticket.id }}" method="POST" style="display: inline;">
+                <button type="submit" style="background: #28a745;">Close Ticket</button>
+            </form>
+            {% endif %}
+            <form action="/delete_ticket/{{ ticket.id }}" method="POST" style="display: inline;">
+                <button type="submit" style="background: #dc3545;">Delete Ticket</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

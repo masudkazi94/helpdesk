@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Helpdesk</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="nav">
+        <h1>🎫 Helpdesk System</h1>
+        <div>
+            Welcome, <strong>{{ user.full_name }}</strong> ({{ user.role }})
+            <a href="/logout" style="background: #6c757d; color: white; padding: 10px 15px; text-decoration: none; border-radius: 6px; margin-left: 10px;">Logout</a>
+        </div>
+    </div>
+
+    {% if user.role == 'user' %}
+    <div class="card">
+        <h2>Create New Ticket</h2>
+        <form action="/create_ticket" method="POST">
+            <input type="text" name="title" placeholder="Issue title" required>
+            <textarea name="description" placeholder="Describe your issue" rows="3" required></textarea>
+            <button type="submit" style="background: #28a745;">Submit Ticket</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <h2>{% if user.role == 'admin' %}All Tickets{% else %}Your Tickets{% endif %}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    {% if user.role == 'admin' %}<th>User</th>{% endif %}
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr>
+                    <td>#{{ ticket.id }}</td>
+                    <td><strong>{{ ticket.title }}</strong></td>
+                    {% if user.role == 'admin' %}<td>{{ ticket.full_name }}</td>{% endif %}
+                    <td>{{ ticket.description }}</td>
+                    <td class="status-{{ ticket.status|lower }}">{{ ticket.status }}</td>
+                    <td>{{ ticket.created_at[:16] }}</td>
+                    <td>
+                        {% if user.role == 'admin' and ticket.status == 'Open' %}
+                        <form action="/close_ticket/{{ ticket.id }}" method="POST" style="display: inline;">
+                            <button type="submit" style="background: #28a745; padding: 8px 12px;">Close</button>
+                        </form>
+                        {% endif %}
+                        {% if user.role == 'admin' %}
+                        <form action="/delete_ticket/{{ ticket.id }}" method="POST" style="display: inline;">
+                            <button type="submit" style="background: #dc3545; padding: 8px 12px;">Delete</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
