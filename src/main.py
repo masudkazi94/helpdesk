@@ -7,7 +7,7 @@ import auth
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="../static"), name="static")
 
 def get_current_user(request):
     token = request.cookies.get("auth_token")
